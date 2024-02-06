@@ -27,20 +27,16 @@ public class Messaggio {
     @JoinColumn(name = "chat_id")
     @JsonIgnore
     private Chat chat;
-    @ManyToMany(mappedBy = "messaggio_as_sender",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinTable(name = "messaggio_user",
-            joinColumns = @JoinColumn(name = "messaggio_id"),
-            foreignKey = @ForeignKey(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"),
-            inverseForeignKey = @ForeignKey(name = "messaggio_id"))
-    private List<User> sender;
-    @ManyToMany(mappedBy = "messaggio_as_receiver",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "messaggio_id")
+    private User sender;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinTable(name = "messaggio_user",
+    @JoinTable(name = "messaggio_receiver",
             joinColumns = @JoinColumn(name = "messaggio_id"),
-            foreignKey = @ForeignKey(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"),
+            foreignKey = @ForeignKey(name = "receiver_id"),
+            inverseJoinColumns = @JoinColumn(name = "receiver_id"),
             inverseForeignKey = @ForeignKey(name = "messaggio_id"))
     private List<User> receiver;
 }

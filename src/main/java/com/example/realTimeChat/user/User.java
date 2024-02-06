@@ -34,31 +34,21 @@ public class User implements UserDetails {
     private int eta;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="starter",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<Chat> chat_as_starter;
-    @ManyToMany(mappedBy = "partecipant",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "partecipants",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<Chat> chat_as_partecipant;
-    @ManyToMany(mappedBy = "sender",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sender",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    @JoinTable(name = "messaggio_sender",
-            joinColumns = @JoinColumn(name = "messaggio_id"),
-            foreignKey = @ForeignKey(name = "sender_id"),
-            inverseJoinColumns = @JoinColumn(name = "sender_id"),
-            inverseForeignKey = @ForeignKey(name = "messaggio_id"))
-    private List<User> messaggio_as_sender;
+    private List<Messaggio> messaggio_as_sender;
     @ManyToMany(mappedBy = "receiver",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    @JoinTable(name = "messaggio_receiver",
-            joinColumns = @JoinColumn(name = "messaggio_id"),
-            foreignKey = @ForeignKey(name = "receiver_id"),
-            inverseJoinColumns = @JoinColumn(name = "receiver_id"),
-            inverseForeignKey = @ForeignKey(name = "messaggio_id"))
     private List<Messaggio> messaggio_as_receiver;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

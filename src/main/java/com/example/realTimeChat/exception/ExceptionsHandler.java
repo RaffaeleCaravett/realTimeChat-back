@@ -1,8 +1,8 @@
 package com.example.realTimeChat.exception;
 
 
-import com.example.academy.payloads.errors.ErrorsDTO;
-import com.example.academy.payloads.errors.ErrorsWithListDTO;
+import com.example.realTimeChat.payloads.errors.ErrorsDTO;
+import com.example.realTimeChat.payloads.errors.ErrorsWithListDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

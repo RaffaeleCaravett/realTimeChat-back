@@ -1,8 +1,9 @@
 package com.example.realTimeChat.user;
 
-import com.example.academy.exception.BadRequestException;
-import com.example.academy.exception.NotFoundException;
-import com.example.academy.payloads.entities.UserRegistrationDTO;
+
+import com.example.realTimeChat.exception.BadRequestException;
+import com.example.realTimeChat.exception.NotFoundException;
+import com.example.realTimeChat.payloads.entities.UserRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

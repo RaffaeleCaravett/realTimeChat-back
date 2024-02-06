@@ -21,7 +21,7 @@ public class ChatService {
     @Autowired
     MessageRepository messageRepository;
 
-    public Chat saveChat(ChatDTO body){
+    public Chat save(ChatDTO body){
         if(body.tipo_chat().equals("SINGOLA"))
         {
             List<Chat> chatList = this.findByStarterId(body.starter_id());
