@@ -3,6 +3,7 @@ package com.example.realTimeChat.user;
 
 import com.example.realTimeChat.chat.Chat;
 import com.example.realTimeChat.enums.Role;
+import com.example.realTimeChat.messaggio.Messaggio;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -33,11 +34,32 @@ public class User implements UserDetails {
     private int eta;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private List<Chat> chat;
-
+    private List<Chat> chat_as_starter;
+    @ManyToMany(mappedBy = "partecipant",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private List<Chat> chat_as_partecipant;
+    @ManyToMany(mappedBy = "sender",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    @JoinTable(name = "messaggio_sender",
+            joinColumns = @JoinColumn(name = "messaggio_id"),
+            foreignKey = @ForeignKey(name = "sender_id"),
+            inverseJoinColumns = @JoinColumn(name = "sender_id"),
+            inverseForeignKey = @ForeignKey(name = "messaggio_id"))
+    private List<User> messaggio_as_sender;
+    @ManyToMany(mappedBy = "receiver",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    @JoinTable(name = "messaggio_receiver",
+            joinColumns = @JoinColumn(name = "messaggio_id"),
+            foreignKey = @ForeignKey(name = "receiver_id"),
+            inverseJoinColumns = @JoinColumn(name = "receiver_id"),
+            inverseForeignKey = @ForeignKey(name = "messaggio_id"))
+    private List<Messaggio> messaggio_as_receiver;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(this.role.name()));
