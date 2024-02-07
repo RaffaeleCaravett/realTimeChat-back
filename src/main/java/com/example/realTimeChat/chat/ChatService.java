@@ -52,6 +52,7 @@ public class ChatService {
         for(Long l : body.partecipants_id()){
             users.add(userRepository.findById(l).get());
         }
+        chat.setPartecipants(users);
         chat.setTipoChat(TipoChat.valueOf(body.tipo_chat()));
         return chatRepository.save(chat);
     }

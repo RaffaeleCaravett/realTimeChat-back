@@ -2,17 +2,23 @@ package com.example.realTimeChat.messaggio;
 
 import com.example.realTimeChat.chat.Chat;
 import com.example.realTimeChat.chat.ChatRepository;
+import com.example.realTimeChat.controller.ChatControllerWS;
 import com.example.realTimeChat.enums.MessageState;
+import com.example.realTimeChat.enums.MessageType;
+import com.example.realTimeChat.model.ChatMessage;
 import com.example.realTimeChat.payloads.entities.ChatDTO;
 import com.example.realTimeChat.payloads.entities.MessageDTO;
 import com.example.realTimeChat.user.User;
 import com.example.realTimeChat.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MessageService {
@@ -22,7 +28,10 @@ public class MessageService {
     UserRepository userRepository;
     @Autowired
     ChatRepository chatRepository;
-
+    @Autowired
+    ChatControllerWS controller;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     public Messaggio findById(long id){
         return messageRepository.findById(id).get();
@@ -32,7 +41,7 @@ public class MessageService {
         return "deleted";
     }
 
-    public long saveMessage(MessageDTO messageDTO){
+    public Messaggio saveMessage(MessageDTO messageDTO){
         Messaggio message = new Messaggio();
         message.setSender(userRepository.findById(messageDTO.sender_id()).get());
         List<User> receivers = new ArrayList<>();
@@ -45,7 +54,14 @@ public class MessageService {
         message.setDate_at(LocalDate.now());
         message.setMessageState(MessageState.SENT);
         messageRepository.save(message);
-        return message.getId();
+
+        ChatMessage chatMessage= new ChatMessage();
+        chatMessage.setContent(message.getMessage());
+        chatMessage.setType(MessageType.CHAT);
+        chatMessage.setSender(message.getSender().getNome());
+        messagingTemplate.convertAndSend("/topic/public", chatMessage);
+
+        return message;
     }
 
     public List<Messaggio> findByChatId(long id){

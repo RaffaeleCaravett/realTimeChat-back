@@ -35,5 +35,6 @@ public class Chat {
             inverseJoinColumns = @JoinColumn(name = "partecipant_id"),
             inverseForeignKey = @ForeignKey(name = "chat_id"))
     private List<User> partecipants;
+    @Enumerated(EnumType.STRING)
     private TipoChat tipoChat;
 }

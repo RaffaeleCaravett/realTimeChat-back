@@ -6,6 +6,8 @@ import com.example.realTimeChat.payloads.entities.ChatDTO;
 import com.example.realTimeChat.payloads.entities.MessageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -40,7 +42,7 @@ public class MessageController {
     }
     @PostMapping("")
     @PreAuthorize("hasAuthority('USER')")
-    public long saveMessage(@RequestBody @Validated MessageDTO body, BindingResult validation){
+    public Messaggio saveMessage(@RequestBody @Validated MessageDTO body, BindingResult validation){
         if(validation.hasErrors()){
             throw new BadRequestException(validation.getAllErrors());
         } else {

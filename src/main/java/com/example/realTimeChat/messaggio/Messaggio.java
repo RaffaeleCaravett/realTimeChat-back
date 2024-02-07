@@ -40,5 +40,6 @@ public class Messaggio {
             inverseJoinColumns = @JoinColumn(name = "receiver_id"),
             inverseForeignKey = @ForeignKey(name = "messaggio_id"))
     private List<User> receiver;
+    @Enumerated(EnumType.STRING)
     private MessageState messageState;
 }
