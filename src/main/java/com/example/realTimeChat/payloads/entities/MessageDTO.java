@@ -13,6 +13,7 @@ public record MessageDTO
          @NotNull(message = "Sender_id necessario")
          long sender_id,
          @NotNull(message = "Receiver_id necessario")
-         List<Long> receiver_id
+         List<Long> receiver_id,
+         String stato
          ){
 }

@@ -2,6 +2,7 @@ package com.example.realTimeChat.messaggio;
 
 import com.example.realTimeChat.exception.BadRequestException;
 import com.example.realTimeChat.exception.NotFoundException;
+import com.example.realTimeChat.payloads.entities.ChatDTO;
 import com.example.realTimeChat.payloads.entities.MessageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,5 +51,16 @@ public class MessageController {
     @PreAuthorize("hasAuthority('USER')")
     public List<Messaggio> findByChatId(@PathVariable long chatId)  {
         return messageService.findByChatId(chatId);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    public long findByIdAndUpdate(@PathVariable long id, @RequestBody MessageDTO body) throws NotFoundException {
+        if(messageRepository.findById(id).isPresent()){
+            return messageService.findByIdAndUpdate(id, body);
+        }
+        else{
+            throw new BadRequestException("Il messaggio non è stato trovato!");
+        }
     }
 }

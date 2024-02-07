@@ -1,6 +1,9 @@
 package com.example.realTimeChat.messaggio;
 
+import com.example.realTimeChat.chat.Chat;
 import com.example.realTimeChat.chat.ChatRepository;
+import com.example.realTimeChat.enums.MessageState;
+import com.example.realTimeChat.payloads.entities.ChatDTO;
 import com.example.realTimeChat.payloads.entities.MessageDTO;
 import com.example.realTimeChat.user.User;
 import com.example.realTimeChat.user.UserRepository;
@@ -40,11 +43,21 @@ public class MessageService {
         message.setMessage(messageDTO.messaggio());
         message.setChat(chatRepository.findById(messageDTO.chat_id()).get());
         message.setDate_at(LocalDate.now());
+        message.setMessageState(MessageState.SENT);
         messageRepository.save(message);
         return message.getId();
     }
 
     public List<Messaggio> findByChatId(long id){
         return messageRepository.findAllByChat_Id(id);
+    }
+    public long findByIdAndUpdate(long id, MessageDTO messageDTO){
+        Messaggio messaggio = messageRepository.findById(id).get();
+
+        messaggio.setMessage(messageDTO.messaggio());
+        messaggio.setMessageState(MessageState.valueOf(messageDTO.stato()));
+        messageRepository.save(messaggio);
+
+        return messaggio.getId();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.realTimeChat.messaggio;
 
 import com.example.realTimeChat.chat.Chat;
+import com.example.realTimeChat.enums.MessageState;
 import com.example.realTimeChat.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -39,4 +40,5 @@ public class Messaggio {
             inverseJoinColumns = @JoinColumn(name = "receiver_id"),
             inverseForeignKey = @ForeignKey(name = "messaggio_id"))
     private List<User> receiver;
+    private MessageState messageState;
 }
