@@ -28,10 +28,7 @@ public class MessageService {
     UserRepository userRepository;
     @Autowired
     ChatRepository chatRepository;
-    @Autowired
-    ChatControllerWS controller;
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+
 
     public Messaggio findById(long id){
         return messageRepository.findById(id).get();
@@ -53,15 +50,8 @@ public class MessageService {
         message.setChat(chatRepository.findById(messageDTO.chat_id()).get());
         message.setDate_at(LocalDate.now());
         message.setMessageState(MessageState.SENT);
-        messageRepository.save(message);
+        return messageRepository.save(message);
 
-        ChatMessage chatMessage= new ChatMessage();
-        chatMessage.setContent(message.getMessage());
-        chatMessage.setType(MessageType.CHAT);
-        chatMessage.setSender(message.getSender().getNome());
-        messagingTemplate.convertAndSend("/topic/public", chatMessage);
-
-        return message;
     }
 
     public List<Messaggio> findByChatId(long id){

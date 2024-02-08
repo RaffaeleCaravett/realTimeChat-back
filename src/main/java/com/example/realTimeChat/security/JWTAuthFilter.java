@@ -72,16 +72,8 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         // Questo metodo serve per specificare quando il filtro JWTAuthFilter non debba entrare in azione
         // Ad es tutte le richieste al controller /auth/** non devono essere filtrate
         String pathWithArguments = request.getServletPath() + request.getQueryString();
-        if ("WebSocket".equalsIgnoreCase(request.getHeader("Upgrade")) &&
-                "GET".equalsIgnoreCase(request.getMethod())) {
-            return true;
-        }
 
-        String path = request.getRequestURI();
-        if (path != null && (path.startsWith("/app/") || path.startsWith("/topic/"))) {
-            return true;
-        }
-        List<String> excludedPaths = Arrays.asList("/auth");
+        List<String> excludedPaths = Arrays.asList("/auth","/chat.register","/topic/public","/chat.send");
 
         return excludedPaths.stream().anyMatch(pathWithArguments::startsWith);    }
 }
