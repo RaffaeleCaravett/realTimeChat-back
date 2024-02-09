@@ -26,8 +26,6 @@ public class MessageController {
     private MessageService messageService;
     @Autowired
     private MessageRepository messageRepository;
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
 
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('USER')")
@@ -46,14 +44,12 @@ public class MessageController {
         }
 
     }
-    @PostMapping("/chat/{to}")
+    @PostMapping("")
     @PreAuthorize("hasAuthority('USER')")
-    public Messaggio saveMessage(@RequestBody @Validated MessageDTO body, BindingResult validation, @DestinationVariable String to) throws ChangeSetPersister.NotFoundException {
+    public Messaggio saveMessage(@RequestBody @Validated MessageDTO body, BindingResult validation)  {
         if(validation.hasErrors()){
             throw new BadRequestException(validation.getAllErrors());
-        } else {
-            simpMessagingTemplate.convertAndSend("/topic/messages/" + to, body);
-            return  messageService.saveMessage(body);
+        } else {return  messageService.saveMessage(body);
 
         }
     }

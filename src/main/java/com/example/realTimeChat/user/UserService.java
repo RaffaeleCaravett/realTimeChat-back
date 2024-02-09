@@ -6,6 +6,8 @@ import com.example.realTimeChat.payloads.entities.UserRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
     @Autowired
@@ -30,8 +32,7 @@ public class UserService {
         utenteRepository.delete(found);
     }
 
-    public User findByEmail(String email) throws NotFoundException {
-        return utenteRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("Utente con email "+ email + " non trovato"));
+    public Optional<User> findByEmail(String email) throws NotFoundException {
+        return utenteRepository.findByEmail(email);
     }
 }

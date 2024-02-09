@@ -39,7 +39,7 @@ public class AuthService {
 
     public Token authenticateUser(UserLoginDTO body) throws Exception {
         // 1. Verifichiamo che l'email dell'utente sia nel db
-        User user = usersService.findByEmail(body.email());
+        User user = usersService.findByEmail(body.email()).get();
         // 2. In caso affermativo, verifichiamo se la password corrisponde a quella trovata nel db
         if(bcrypt.matches(body.password(), user.getPassword()))  {
             // 3. Se le credenziali sono OK --> Genero un JWT e lo restituisco
