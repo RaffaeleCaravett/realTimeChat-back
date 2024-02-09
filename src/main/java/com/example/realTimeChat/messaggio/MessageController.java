@@ -4,17 +4,21 @@ import com.example.realTimeChat.exception.BadRequestException;
 import com.example.realTimeChat.exception.NotFoundException;
 import com.example.realTimeChat.payloads.entities.ChatDTO;
 import com.example.realTimeChat.payloads.entities.MessageDTO;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import org.slf4j.Logger;
 @RestController
 @RequestMapping("/messaggio")
 public class MessageController {
@@ -22,6 +26,8 @@ public class MessageController {
     private MessageService messageService;
     @Autowired
     private MessageRepository messageRepository;
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('USER')")
@@ -40,13 +46,15 @@ public class MessageController {
         }
 
     }
-    @PostMapping("")
+    @PostMapping("/chat/{to}")
     @PreAuthorize("hasAuthority('USER')")
-    public Messaggio saveMessage(@RequestBody @Validated MessageDTO body, BindingResult validation){
+    public Messaggio saveMessage(@RequestBody @Validated MessageDTO body, BindingResult validation, @DestinationVariable String to) throws ChangeSetPersister.NotFoundException {
         if(validation.hasErrors()){
             throw new BadRequestException(validation.getAllErrors());
         } else {
+            simpMessagingTemplate.convertAndSend("/topic/messages/" + to, body);
             return  messageService.saveMessage(body);
+
         }
     }
     @GetMapping(value = "/chat/{chatId}")

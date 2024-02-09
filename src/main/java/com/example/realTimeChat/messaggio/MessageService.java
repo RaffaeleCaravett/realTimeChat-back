@@ -2,17 +2,12 @@ package com.example.realTimeChat.messaggio;
 
 import com.example.realTimeChat.chat.Chat;
 import com.example.realTimeChat.chat.ChatRepository;
-import com.example.realTimeChat.controller.ChatControllerWS;
 import com.example.realTimeChat.enums.MessageState;
-import com.example.realTimeChat.enums.MessageType;
-import com.example.realTimeChat.model.ChatMessage;
-import com.example.realTimeChat.payloads.entities.ChatDTO;
 import com.example.realTimeChat.payloads.entities.MessageDTO;
 import com.example.realTimeChat.user.User;
 import com.example.realTimeChat.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -38,7 +33,7 @@ public class MessageService {
         return "deleted";
     }
 
-    public Messaggio saveMessage(MessageDTO messageDTO){
+    public Messaggio saveMessage(MessageDTO messageDTO)  {
         Messaggio message = new Messaggio();
         message.setSender(userRepository.findById(messageDTO.sender_id()).get());
         List<User> receivers = new ArrayList<>();
