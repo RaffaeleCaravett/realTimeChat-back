@@ -2,6 +2,7 @@ package com.example.realTimeChat.chat;
 
 import com.example.realTimeChat.enums.TipoChat;
 import com.example.realTimeChat.messaggio.Messaggio;
+import com.example.realTimeChat.notification.Notification;
 import com.example.realTimeChat.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -37,4 +38,8 @@ public class Chat {
     private List<User> partecipants;
     @Enumerated(EnumType.STRING)
     private TipoChat tipoChat;
+    @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private List<Notification> notifications;
 }

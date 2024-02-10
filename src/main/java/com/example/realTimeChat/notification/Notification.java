@@ -1,10 +1,13 @@
 package com.example.realTimeChat.notification;
 
+import com.example.realTimeChat.chat.Chat;
+import com.example.realTimeChat.enums.StatoNotifica;
 import com.example.realTimeChat.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.repository.cdi.Eager;
 
 import java.util.List;
 
@@ -28,4 +31,10 @@ public class Notification {
             inverseForeignKey = @ForeignKey(name = "notification_id"))
     private List<User> receiver;
     private String testo;
+    @Enumerated(EnumType.STRING)
+    private StatoNotifica statoNotifica;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
 }

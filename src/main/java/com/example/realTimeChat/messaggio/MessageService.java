@@ -3,6 +3,10 @@ package com.example.realTimeChat.messaggio;
 import com.example.realTimeChat.chat.Chat;
 import com.example.realTimeChat.chat.ChatRepository;
 import com.example.realTimeChat.enums.MessageState;
+import com.example.realTimeChat.enums.StatoNotifica;
+import com.example.realTimeChat.enums.TipoChat;
+import com.example.realTimeChat.notification.Notification;
+import com.example.realTimeChat.notification.NotificationRepository;
 import com.example.realTimeChat.payloads.entities.MessageDTO;
 import com.example.realTimeChat.user.User;
 import com.example.realTimeChat.user.UserRepository;
@@ -23,7 +27,8 @@ public class MessageService {
     UserRepository userRepository;
     @Autowired
     ChatRepository chatRepository;
-
+@Autowired
+    NotificationRepository notificationRepository;
 
     public Messaggio findById(long id){
         return messageRepository.findById(id).get();
@@ -35,6 +40,7 @@ public class MessageService {
 
     public Messaggio saveMessage(MessageDTO messageDTO)  {
         Messaggio message = new Messaggio();
+        Chat chat = chatRepository.findById(messageDTO.chat_id()).get();
         message.setSender(userRepository.findById(messageDTO.sender_id()).get());
         List<User> receivers = new ArrayList<>();
         for ( Long l : messageDTO.receiver_id()){
@@ -42,9 +48,34 @@ public class MessageService {
         }
         message.setReceiver(receivers);
         message.setMessage(messageDTO.messaggio());
-        message.setChat(chatRepository.findById(messageDTO.chat_id()).get());
+        message.setChat(chat);
         message.setDate_at(LocalDate.now());
         message.setMessageState(MessageState.SENT);
+        List<Notification>notifications=new ArrayList<>();
+
+        if(chat.getTipoChat().equals(TipoChat.SINGOLA)){
+            if(chat.getNotifications().isEmpty() ||
+                    chat.getNotifications().size()==1&&!chat.getNotifications().get(0).getReceiver().get(0).equals(message.getReceiver().get(0))
+            ){
+                Notification notification = new Notification();
+                notification.setTesto("Nuovo messaggio da " + message.getSender().getNome());
+                notification.setStatoNotifica(StatoNotifica.NOT_SAW);
+                notification.setChat(message.getChat());
+                notification.setSender(message.getSender());
+                notification.setReceiver(message.getReceiver());
+                notifications.add(notification);
+            notificationRepository.save(notification);
+                chat.setNotifications(notifications);
+            }else if(chat.getNotifications().size()==2){
+                if(chat.getNotifications().get(0).getStatoNotifica().equals(StatoNotifica.SAW)&&chat.getNotifications().get(0).getReceiver().get(0).equals(message.getReceiver().get(0))){
+                    chat.getNotifications().get(0).setStatoNotifica(StatoNotifica.NOT_SAW);
+                }else if(chat.getNotifications().get(1).getStatoNotifica().equals(StatoNotifica.SAW)&&chat.getNotifications().get(1).getReceiver().get(0).equals(message.getReceiver().get(0))){
+                    chat.getNotifications().get(0).setStatoNotifica(StatoNotifica.NOT_SAW);
+                }
+            }
+        }
+
+
         return messageRepository.save(message);
 
     }
