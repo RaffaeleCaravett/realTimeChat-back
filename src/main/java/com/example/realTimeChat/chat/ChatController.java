@@ -68,6 +68,15 @@ public class ChatController {
 return chatService.save(body);
         }
     }
+    @PostMapping("")
+    @PreAuthorize("hasAuthority('USER')")
+    public Chat saveGroupChat(@RequestBody @Validated ChatDTO body, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        } else {
+            return chatService.saveGroupChat(body);
+        }
+    }
     @GetMapping(value = "/starter/{userId}")
     @PreAuthorize("hasAuthority('USER')")
     public List<Chat> findByUserId(@PathVariable long userId)  {

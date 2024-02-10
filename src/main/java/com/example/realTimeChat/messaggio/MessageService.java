@@ -57,21 +57,23 @@ public class MessageService {
             if(chat.getNotifications().isEmpty() ||
                     chat.getNotifications().size()==1&&!chat.getNotifications().get(0).getReceiver().get(0).equals(message.getReceiver().get(0))
             ){
-                Notification notification = new Notification();
-                notification.setTesto("Nuovo messaggio da " + message.getSender().getNome());
-                notification.setStatoNotifica(StatoNotifica.NOT_SAW);
-                notification.setChat(message.getChat());
-                notification.setSender(message.getSender());
-                notification.setReceiver(message.getReceiver());
-                notifications.add(notification);
-            notificationRepository.save(notification);
-                chat.setNotifications(notifications);
+                    Notification notification = new Notification();
+                    notification.setTesto("Nuovo messaggio da " + message.getSender().getNome());
+                    notification.setStatoNotifica(StatoNotifica.NOT_SAW);
+                    notification.setChat(message.getChat());
+                    notification.setSender(message.getSender());
+                    notification.setReceiver(message.getReceiver());
+                    notifications.add(notification);
+                    notificationRepository.save(notification);
+                    chat.setNotifications(notifications);
             }else if(chat.getNotifications().size()==2){
-                if(chat.getNotifications().get(0).getStatoNotifica().equals(StatoNotifica.SAW)&&chat.getNotifications().get(0).getReceiver().get(0).equals(message.getReceiver().get(0))){
+                if(chat.getNotifications().get(0).getStatoNotifica()==StatoNotifica.SAW&&chat.getNotifications().get(0).getReceiver().get(0).equals(message.getReceiver().get(0))){
                     chat.getNotifications().get(0).setStatoNotifica(StatoNotifica.NOT_SAW);
-                }else if(chat.getNotifications().get(1).getStatoNotifica().equals(StatoNotifica.SAW)&&chat.getNotifications().get(1).getReceiver().get(0).equals(message.getReceiver().get(0))){
-                    chat.getNotifications().get(0).setStatoNotifica(StatoNotifica.NOT_SAW);
+                }else if(chat.getNotifications().get(1).getStatoNotifica()==StatoNotifica.SAW&&chat.getNotifications().get(1).getReceiver().get(0).equals(message.getReceiver().get(0))){
+                    chat.getNotifications().get(1).setStatoNotifica(StatoNotifica.NOT_SAW);
                 }
+            }else if(chat.getNotifications().size()==1&&chat.getNotifications().get(0).getReceiver().get(0).equals(message.getReceiver().get(0))){
+                chat.getNotifications().get(0).setStatoNotifica(StatoNotifica.NOT_SAW);
             }
         }
 

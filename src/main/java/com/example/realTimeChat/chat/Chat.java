@@ -40,6 +40,5 @@ public class Chat {
     private TipoChat tipoChat;
     @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private List<Notification> notifications;
 }

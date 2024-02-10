@@ -53,7 +53,26 @@ public class ChatService {
             users.add(userRepository.findById(l).get());
         }
         chat.setPartecipants(users);
-        chat.setTipoChat(TipoChat.valueOf(body.tipo_chat()));
+        chat.setTipoChat(TipoChat.SINGOLA);
+        return chatRepository.save(chat);
+    }
+
+    public Chat saveGroupChat(ChatDTO chatDTO){
+        if(chatDTO.partecipants_id().size()<=1){
+            return this.save(chatDTO);
+        }
+            Chat chat = new Chat();
+
+            chat.setNotifications(new ArrayList<>());
+            chat.setTipoChat(TipoChat.DI_GRUPPO);
+            chat.setStarter(userRepository.findById(chatDTO.starter_id()).get());
+            List<User> partecipants = new ArrayList<>();
+            for(Long l : chatDTO.partecipants_id()){
+                partecipants.add(userRepository.findById(l).get());
+            }
+            chat.setPartecipants(partecipants);
+
+            chat.setMessaggio(new ArrayList<>());
         return chatRepository.save(chat);
     }
     public long findByIdAndUpdate(long id,ChatDTO chatDTO){
