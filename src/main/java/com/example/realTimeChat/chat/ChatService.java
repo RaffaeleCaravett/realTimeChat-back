@@ -73,6 +73,11 @@ public class ChatService {
             chat.setPartecipants(partecipants);
 
             chat.setMessaggio(new ArrayList<>());
+            if(chatDTO.nome() != null){
+                chat.setNome(chatDTO.nome());
+        }else{
+                chat.setNome("ChatDiGruppo"+chat.getId());
+            }
         return chatRepository.save(chat);
     }
     public long findByIdAndUpdate(long id,ChatDTO chatDTO){

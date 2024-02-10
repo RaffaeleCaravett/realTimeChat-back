@@ -68,7 +68,7 @@ public class ChatController {
 return chatService.save(body);
         }
     }
-    @PostMapping("")
+    @PostMapping("/group")
     @PreAuthorize("hasAuthority('USER')")
     public Chat saveGroupChat(@RequestBody @Validated ChatDTO body, BindingResult validation) {
         if (validation.hasErrors()) {

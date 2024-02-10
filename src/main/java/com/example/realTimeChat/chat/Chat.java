@@ -41,4 +41,5 @@ public class Chat {
     @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Notification> notifications;
+    private String nome;
 }

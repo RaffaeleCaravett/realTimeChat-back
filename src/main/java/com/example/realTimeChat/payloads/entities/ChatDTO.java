@@ -12,6 +12,7 @@ public record ChatDTO(
         long starter_id,
         @NotNull(message = "Almeno un partecipante nella chat")
         List<Long> partecipants_id,
-        String tipo_chat
+        String tipo_chat,
+        String nome
 ) {
 }
