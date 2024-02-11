@@ -5,11 +5,14 @@ import com.example.realTimeChat.exception.BadRequestException;
 import com.example.realTimeChat.exception.NotFoundException;
 import com.example.realTimeChat.payloads.entities.UserRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -48,6 +51,11 @@ public class UserController {
         }else{
             throw new BadRequestException("Non puoi eliminare questo utente");
         }
+    }
+
+    @GetMapping("")
+    public List<User> getUser(){
+        return utenteService.getAll();
     }
 
 }

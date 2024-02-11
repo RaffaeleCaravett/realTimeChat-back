@@ -6,6 +6,7 @@ import com.example.realTimeChat.payloads.entities.UserRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,5 +35,8 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) throws NotFoundException {
         return utenteRepository.findByEmail(email);
+    }
+    public List<User> getAll(){
+        return utenteRepository.findAll();
     }
 }
