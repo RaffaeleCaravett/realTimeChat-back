@@ -59,6 +59,12 @@ public class MessageController {
         return messageService.findByChatId(chatId);
     }
 
+    @GetMapping(value = "/sender/{senderId}")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<Messaggio> findBySenderId(@PathVariable long senderId)  {
+        return messageService.findByChatId(senderId);
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public long findByIdAndUpdate(@PathVariable long id, @RequestBody MessageDTO body) throws NotFoundException {

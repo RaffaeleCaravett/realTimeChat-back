@@ -19,23 +19,16 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
     @JoinColumn(name = "sender_id")
     private User sender;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinTable(name="notification_receiver",
-            joinColumns = @JoinColumn(name = "notification_id"),
-            foreignKey = @ForeignKey(name = "receiver_id"),
-            inverseJoinColumns = @JoinColumn(name = "receiver_id"),
-            inverseForeignKey = @ForeignKey(name = "notification_id"))
-    private List<User> receiver;
+    @ManyToOne
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
     private String testo;
     @Enumerated(EnumType.STRING)
     private StatoNotifica statoNotifica;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
     @JoinColumn(name = "chat_id")
     @JsonIgnore
     private Chat chat;

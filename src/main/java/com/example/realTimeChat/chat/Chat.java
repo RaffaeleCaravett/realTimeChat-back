@@ -21,15 +21,12 @@ public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToMany(mappedBy = "chat",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "chat",fetch = FetchType.EAGER,orphanRemoval = true)
     private List<Messaggio> messaggio;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
     @JoinColumn(name="starter_id")
     private User starter;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "chat_partecipant",
             joinColumns = @JoinColumn(name = "chat_id"),
             foreignKey = @ForeignKey(name = "partecipant_id"),
@@ -39,7 +36,6 @@ public class Chat {
     @Enumerated(EnumType.STRING)
     private TipoChat tipoChat;
     @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Notification> notifications;
     private String nome;
 }

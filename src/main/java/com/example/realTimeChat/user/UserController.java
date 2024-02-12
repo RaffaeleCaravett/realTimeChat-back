@@ -26,12 +26,10 @@ public class UserController {
     };
 
     @DeleteMapping("/me")
-    @ResponseStatus(HttpStatus.NO_CONTENT) // <-- 204 NO CONTENT
-    public void getProfile(@AuthenticationPrincipal User currentUser){
-        utenteService.findByIdAndDelete(currentUser.getId());
+    public boolean deleteProfile(@AuthenticationPrincipal User currentUser){
+           return utenteService.findByIdAndDelete(currentUser.getId());
     };
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public User findById(@PathVariable int id)  {
         return utenteService.findById(id);
     }
@@ -41,7 +39,10 @@ public class UserController {
     public User findByIdAndUpdate(@PathVariable int id, @RequestBody UserRegistrationDTO body) throws NotFoundException {
         return utenteService.findByIdAndUpdate(id, body);
     }
-
+    @PutMapping("/me")
+    public User findMeAndUpdate( @AuthenticationPrincipal User currentUser, @RequestBody UserRegistrationDTO body){
+        return utenteService.findByIdAndUpdate(currentUser.getId(), body);
+    }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT) // <-- 204 NO CONTENT

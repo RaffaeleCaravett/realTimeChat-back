@@ -34,20 +34,16 @@ public class User implements UserDetails {
     private int eta;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany(mappedBy="starter",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy="starter",fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
     private List<Chat> chat_as_starter;
-    @ManyToMany(mappedBy = "partecipants",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToMany(mappedBy = "partecipants",fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Chat> chat_as_partecipant;
-    @OneToMany(mappedBy = "sender",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "sender",fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
     private List<Messaggio> messaggio_as_sender;
-    @ManyToMany(mappedBy = "receiver",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToMany(mappedBy = "receiver",fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Messaggio> messaggio_as_receiver;
     @Override

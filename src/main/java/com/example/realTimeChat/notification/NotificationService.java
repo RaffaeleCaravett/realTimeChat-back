@@ -34,21 +34,19 @@ public class NotificationService{
         notification.setSender(userService.findById(notificationDTO.sender_id()));
         notification.setChat(chatService.findById(notificationDTO.chat_id()));
         notification.setStatoNotifica(StatoNotifica.valueOf(notificationDTO.statoNotifica()));
-        notification.setReceiver(receivers);
+        notification.setReceiver(receivers.get(0));
         return notificationRepository.save(notification);
     }
     public Notification findByIdAndUpdate(long id,NotificationDTO notificationDTO){
         Notification notification = notificationRepository.findById(id).get();
 
-        List<User> receivers = new ArrayList<>();
-        for(Long l : notificationDTO.receiver_id()){
-            receivers.add(userService.findById(l));
-        }
+        User receiver = userService.findById(notificationDTO.receiver_id().get(0));
+
         notification.setTesto(notificationDTO.testo());
         notification.setSender(userService.findById(notificationDTO.sender_id()));
         notification.setChat(chatService.findById(notificationDTO.chat_id()));
         notification.setStatoNotifica(StatoNotifica.valueOf(notificationDTO.statoNotifica()));
-        notification.setReceiver(receivers);
+        notification.setReceiver(receiver);
         return notificationRepository.save(notification);
     }
 
@@ -72,4 +70,5 @@ public class NotificationService{
         StatoNotifica statoNotifica1 = StatoNotifica.valueOf(statoNotifica);
         return notificationRepository.findByChat_IdAndStatoNotifica(chatId,statoNotifica1);
     }
+
 }

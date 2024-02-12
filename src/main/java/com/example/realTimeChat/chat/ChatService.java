@@ -6,7 +6,12 @@ import com.example.realTimeChat.messaggio.Messaggio;
 import com.example.realTimeChat.payloads.entities.ChatDTO;
 import com.example.realTimeChat.user.User;
 import com.example.realTimeChat.user.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -98,7 +103,7 @@ public class ChatService {
     }
     public boolean findByIdAndDelete(long id){
        try{
-           chatRepository.deleteById(id);
+          chatRepository.deleteById(id);
            return true;
        }catch (Exception e){
            return false;

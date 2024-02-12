@@ -23,17 +23,14 @@ public class Messaggio {
     private long id;
     private String message;
     private LocalDate date_at;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
     @JoinColumn(name = "chat_id")
     @JsonIgnore
     private Chat chat;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "messaggio_id")
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
     private User sender;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "messaggio_receiver",
             joinColumns = @JoinColumn(name = "messaggio_id"),
             foreignKey = @ForeignKey(name = "receiver_id"),
